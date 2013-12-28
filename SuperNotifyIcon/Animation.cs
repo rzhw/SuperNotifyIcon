@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright (c) 2010-2011, Richard Z.H. Wang <http://zhwang.me/>
+ * Copyright (c) 2010-2011,2013 Richard Z.H. Wang <http://rzhw.me/>
  * 
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -21,6 +21,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Zhwang.SuperNotifyIcon
 {
@@ -40,6 +41,8 @@ namespace Zhwang.SuperNotifyIcon
 
         bool _animOpacityReversing = false;
         float _animOpacity = 0;
+
+        TaskCompletionSource<int> _endingTcs;
 
         Bitmap _animCanvas = new Bitmap(16, 16);
 
@@ -69,9 +72,12 @@ namespace Zhwang.SuperNotifyIcon
             _animFrameTimer.Start();
         }
 
-        public void End(int framesToFade)
+        public Task End(int framesToFade)
         {
-            if (framesToFade > 0)
+            if (!_animOpacityReversing) // only return a new tcs if we're not already ending
+                _endingTcs = new TaskCompletionSource<int>();
+
+            if ((_animRefreshTimer.Enabled || _animFrameTimer.Enabled) && framesToFade > 0)
             {
                 _animFramesToFade = framesToFade;
                 _animOpacityReversing = true;
@@ -80,7 +86,11 @@ namespace Zhwang.SuperNotifyIcon
             {
                 _animRefreshTimer.Stop();
                 _animFrameTimer.Stop();
+
+                _endingTcs.SetResult(0);
             }
+
+            return _endingTcs.Task;
         }
 
         private void _animTimer_Tick(object sender, EventArgs e)
@@ -99,13 +109,6 @@ namespace Zhwang.SuperNotifyIcon
                     _animOpacity = Math.Max(0f, _animOpacity - 1f / _animFramesToFade);
                 else if (_animFrame == _animLastDrawnFrame)
                     return;
-
-                // If we're finished, stop the timers!
-                if (_animOpacity == 0)
-                {
-                    _animRefreshTimer.Stop();
-                    _animFrameTimer.Stop();
-                }
             }
 
             using (Graphics g = Graphics.FromImage(_animCanvas))
@@ -128,6 +131,16 @@ namespace Zhwang.SuperNotifyIcon
 
                 // Update the last frame
                 _animLastDrawnFrame = _animFrame;
+            }
+
+            // If we're finished, stop the timers!
+            if (_animOpacityReversing && _animOpacity == 0)
+            {
+                if (_endingTcs != null)
+                    _endingTcs.SetResult(0);
+                _animOpacityReversing = false;
+                _animRefreshTimer.Stop();
+                _animFrameTimer.Stop();
             }
         }
 
