@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7917205F-E357-4793-928C-4193D51C2F73}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Zhwang.SuperNotifyIcon</RootNamespace>
+    <AssemblyName>Zhwang.SuperNotifyIcon</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Animation.cs" />
+    <Compile Include="Dropzone.cs" />
+    <Compile Include="Helpers\NotifyArea.cs" />
+    <Compile Include="Location.cs" />
+    <Compile Include="FormDebugger.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDebugger.Designer.cs">
+      <DependentUpon>FormDebugger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormDrop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDrop.Designer.cs">
+      <DependentUpon>FormDrop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\GlobalHook.cs" />
+    <Compile Include="Helpers\MouseHoldTimed.cs" />
+    <Compile Include="Helpers\MouseHook.cs" />
+    <Compile Include="NotifyIconLocation\Fallback\NotifyIconColorFinder.cs" />
+    <Compile Include="Helpers\NotifyIcon.cs" />
+    <Compile Include="Helpers\SysInfo.cs" />
+    <Compile Include="SuperNotifyIcon.cs" />
+    <Compile Include="Helpers\Taskbar.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Helpers\NativeMethods.cs" />
+    <Compile Include="NotifyIconLocation\Deprecated\WindowPositioning.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FormDebugger.resx">
+      <DependentUpon>FormDebugger.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
